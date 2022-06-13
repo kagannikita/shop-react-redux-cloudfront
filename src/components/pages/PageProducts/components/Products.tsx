@@ -12,6 +12,7 @@ import AddProductToCart from "components/AddProductToCart/AddProductToCart";
 // import axios from 'axios';
 // import API_PATHS from "constants/apiPaths";
 import productList from "./productList.json";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,9 +37,9 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // axios.get(`${API_PATHS.bff}/product/available/`)
-    //   .then(res => setProducts(res.data));
-    setProducts(productList);
+    axios.get(`https://5j0uel8y5i.execute-api.us-east-1.amazonaws.com/dev/products`)
+      .then(res => setProducts(res.data.products));
+    // setProducts(productList);
   }, [])
 
   return (
