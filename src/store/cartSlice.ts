@@ -17,12 +17,13 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    updateFromApi: (state, { payload: { items } }: PayloadAction<CartState>) => {
+    updateFromApi: (
+        state,
+        { payload: { items } }: PayloadAction<CartState>,
+    ) => {
       return {
-        items: [
-            ...items,
-        ],
-      }
+        items: [...items],
+      };
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     addToCart: (state, action: PayloadAction<Product>) => {
@@ -53,37 +54,57 @@ export const cartSlice = createSlice({
   },
 });
 
-export const addToCart = (product: Product) => async (dispatch: any, getState: any) => {
-  dispatch(cartSlice.actions.addToCart(product));
-  const { cart: { items } } = getState();
-  await axios.put(`${API_PATHS.cart}/profile/cart`, { items }, {
-    headers: {
-      Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
-    },
-  })
-};
+export const addToCart =
+    (product: Product) => async (dispatch: any, getState: any) => {
+      dispatch(cartSlice.actions.addToCart(product));
+      const {
+        cart: { items },
+      } = getState();
+      await axios.put(
+          `${API_PATHS.cart}/profile/cart`,
+          { items },
+          {
+            headers: {
+              Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
+            },
+          },
+      );
+    };
 
-export const removeFromCart = (product: Product) => async (dispatch: any, getState: any) => {
-  dispatch(cartSlice.actions.removeFromCart(product));
-  const { cart: { items } } = getState();
-  await axios.put(`${API_PATHS.cart}/profile/cart`, { items }, {
-    headers: {
-      Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
-    },
-  })
-};
+export const removeFromCart =
+    (product: Product) => async (dispatch: any, getState: any) => {
+      dispatch(cartSlice.actions.removeFromCart(product));
+      const {
+        cart: { items },
+      } = getState();
+      await axios.put(
+          `${API_PATHS.cart}/profile/cart`,
+          { items },
+          {
+            headers: {
+              Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
+            },
+          },
+      );
+    };
 
 export const clearCart = () => async (dispatch: any, getState: any) => {
   dispatch(cartSlice.actions.clearCart());
-  const { cart: { items } } = getState();
-  await axios.put(`${API_PATHS.cart}/profile/cart`, { items }, {
-    headers: {
-      Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
-    },
-  })
+  const {
+    cart: { items },
+  } = getState();
+  await axios.put(
+      `${API_PATHS.cart}/profile/cart`,
+      { items },
+      {
+        headers: {
+          Authorization: `Basic ${localStorage.getItem('authorization_token')}`,
+        },
+      },
+  );
 };
 
-export const {updateFromApi} = cartSlice.actions;
+export const { updateFromApi } = cartSlice.actions;
 
 
 // The function below is called a selector and allows us to select a value from

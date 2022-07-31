@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
-import { url } from 'inspector';
+
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -16,11 +16,11 @@ type CSVFileImportProps = {
     title: string;
 };
 
-export default function CSVFileImport({ title }: CSVFileImportProps) {
+export default function CSVFileImport({  title }: CSVFileImportProps) {
     const classes = useStyles();
     const [file, setFile] = useState<any>();
     const [uploadUrl, setUploadUrl] = useState<any>();
-    const [fileName, setFileName] = useState('');
+    const [filename, setFileName] = useState('');
 
     const createFile = (file: any) => {
         let reader = new FileReader();
@@ -43,16 +43,20 @@ export default function CSVFileImport({ title }: CSVFileImportProps) {
     };
 
     const uploadFile = async (e: any) => {
+        const authorization_token = localStorage.getItem('authorization_token');
         // Get the presigned URL
         const response = await axios({
             method: 'GET',
-            url: `https://5j0uel8y5i.execute-api.us-east-1.amazonaws.com/dev/import/${fileName}`,
+            url: `https://wpcexd9ae6.execute-api.us-east-1.amazonaws.com/dev/import/${filename}`,
+            headers: {
+                Authorization: authorization_token ? `Basic ${authorization_token}` : ''
+            }
         });
         console.log('Response: ', response.data);
         console.log('Uploading: ', file);
         let binary = atob(file.split(',')[1]);
         let array = [];
-        for (var i = 0; i < binary.length; i++) {
+        for (let i = 0; i < binary.length; i++) {
             array.push(binary.charCodeAt(i));
         }
         let blobData = new Blob([new Uint8Array(array)], { type: 'text/plain' });
@@ -79,9 +83,9 @@ export default function CSVFileImport({ title }: CSVFileImportProps) {
                     {!uploadUrl && <button onClick={uploadFile}>Upload file</button>}
                 </div>
             )}
-            {fileName && (
+            {filename && (
                 <Typography variant="subtitle1" gutterBottom>
-                    File name: {fileName}
+                    File name: {filename}
                 </Typography>
             )}
         </div>
